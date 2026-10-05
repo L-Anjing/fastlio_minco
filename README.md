@@ -50,14 +50,14 @@ flowchart LR
 
 ## 🚀 快速开始
 
-环境：Ubuntu + ROS 2 Humble，工作区默认位于 `~/workspace/fastlio_nav2`
+环境：Ubuntu + ROS 2 Humble，工作区默认位于 `~/workspace/fastlio_minco`
 
 ### 1. Enviroment Configuration And Package Build
 
 #### 1.1 依赖安装
 
 ```bash
-cd ~/workspace/fastlio_nav2
+cd ~/workspace/fastlio_minco
 source /opt/ros/humble/setup.bash
 rosdep install -r --from-paths src --ignore-src --rosdistro humble -y
 ```
@@ -73,7 +73,7 @@ rosdep install -r --from-paths src --ignore-src --rosdistro humble -y
 
 ```bash
 source /opt/ros/humble/setup.bash
-cd ~/workspace/fastlio_nav2
+cd ~/workspace/fastlio_minco
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 
@@ -85,7 +85,7 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 2. 启动 `fastlio mapping` 完成先验地图构建，扫图结束后 `Ctrl+C` 结束自动保存 `PCD` 地图
 
 ```bash
-cd ~/workspace/fastlio_nav2
+cd ~/workspace/fastlio_minco
 bash launch_mapping.sh
 ```
 
@@ -94,7 +94,7 @@ bash launch_mapping.sh
 ### 3. Reloc And Plan
 
 ```bash
-cd ~/workspace/fastlio_nav2
+cd ~/workspace/fastlio_minco
 bash launch_nav_chain.sh
 ```
 
