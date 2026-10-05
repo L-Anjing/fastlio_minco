@@ -1,12 +1,12 @@
 <div align="center">
 
-# FASTLIO × NAV2
+# FAST-LIO × TerrainMinco
 
-### 面向实车的激光建图、重定位与地形感知全局规划
+### Nav2 规划前端 + 自研地形感知全局规划
 
-[![ROS 2](https://img.shields.io/badge/ROS%202-Humble-blue.svg?style=flat-square&logo=ros)](https://docs.ros.org/en/humble/) [![Livox](https://img.shields.io/badge/Sensor-MID--360-orange.svg?style=flat-square)]() [![FAST-LIO2](https://img.shields.io/badge/SLAM-FAST--LIO2-green.svg?style=flat-square)]() [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)]()
+[![ROS 2](https://img.shields.io/badge/ROS%202-Humble-blue.svg?style=flat-square&logo=ros)](https://docs.ros.org/en/humble/) [![Nav2](https://img.shields.io/badge/Frontend-Nav2%20planning-9cf.svg?style=flat-square)]() [![Livox](https://img.shields.io/badge/Sensor-MID--360-orange.svg?style=flat-square)]() [![FAST-LIO2](https://img.shields.io/badge/SLAM-FAST--LIO2-green.svg?style=flat-square)]() [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-**Livox MID-360** &nbsp;&bull;&nbsp; **FAST-LIO2** &nbsp;&bull;&nbsp; **Terrain-aware A\* + MINCO** &nbsp;&bull;&nbsp; **ROS 2 Humble**
+**Livox MID-360** &nbsp;&bull;&nbsp; **FAST-LIO2** &nbsp;&bull;&nbsp; **Terrain-aware A\* + MINCO** &nbsp;&bull;&nbsp; **Nav2 planning front-end** &nbsp;&bull;&nbsp; **ROS 2 Humble**
 
 [系统架构](#系统一览) &nbsp;&bull;&nbsp; [快速开始](#快速开始) &nbsp;&bull;&nbsp; [技术文档](#技术文档) &nbsp;&bull;&nbsp; [配置入口](#配置入口) &nbsp;&bull;&nbsp; [工作区布局](#工作区布局)
 
@@ -16,7 +16,7 @@
 
 > **把雷达看到的世界，变成机器人可以执行的路线。**
 
-本仓库是一套 ROS 2 实车导航工作区：从 MID-360 点云与 IMU 输入开始，完成激光里程计、先验地图重定位、地面与障碍分割，再生成避障且考虑坡道/台阶（待测试）方向的全局路径。导航包负责输出路径，底盘控制由外部程序接入。
+本仓库是一套 ROS 2 实车导航工作区：从 MID-360 点云与 IMU 输入开始，完成激光里程计、先验地图重定位、地面与障碍分割，再生成避障且考虑坡道/台阶（待测试）方向的全局路径。规划部分以 Nav2 的规划前端为宿主，规划算法与地形语义为自研实现；导航包负责输出路径，底盘控制由外部程序接入。
 
 > 🎬 **实车演示视频**
 > <div align="center">
@@ -119,7 +119,7 @@ bash launch_nav_chain.sh
 | --- | --- |
 | FAST-LIO 话题、雷达外参、滤波参数 | [`mid360.yaml`](src/fast_lio/config/mapping/mid360.yaml) |
 | 重定位、PCD 地图及地形识别 | [`relocalization.yaml`](src/fast_lio/config/reloc/relocalization.yaml) |
-| Nav2 costmap、规划器与实时性参数 | [`nav2_params.yaml`](src/navigation/params/nav2_params.yaml) |
+| Nav2 costmap + TerrainMinco 规划器与实时性参数 | [`nav2_params.yaml`](src/navigation/params/nav2_params.yaml) |
 | 地面分割、障碍高度和车体包围盒 | [`segmentation_params.yaml`](src/linefit_ground_segmentation_ros/launch/segmentation_params.yaml) |
 | MID-360 IP 与设备网络参数 | [`MID360_config.json`](src/livox_ros_driver2/config/MID360_config.json) |
 
@@ -133,7 +133,7 @@ src/
 ├── livox_ros_driver2/                # MID-360 ROS 2 驱动
 ├── linefit_ground_segmentation/      # 地面分割核心算法库
 ├── linefit_ground_segmentation_ros/  # ROS 2 分割节点与参数
-└── navigation/                       # Nav2 全局规划、TerrainMinco、RViz
+└── navigation/                       # Nav2 规划前端 + TerrainMinco + RViz
 ```
 
 > `navigation` 只负责全局路径规划，不发布底盘速度指令。外部控制器订阅 `/plan`，并结合适合控制闭环的速度反馈执行路径。

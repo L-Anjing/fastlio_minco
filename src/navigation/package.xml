@@ -3,9 +3,16 @@
 <package format="3">
   <name>navigation</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="fyt@todo.todo">fyt</maintainer>
-  <license>TODO: License declaration</license>
+  <description>
+    Terrain-aware global planning on top of the Nav2 planning front-end
+    (nav2_costmap_2d + nav2_planner + nav2_bt_navigator + nav2_lifecycle_manager).
+    Ships the TerrainMinco global planner plugin (semantic A* + MINCO trajectory
+    optimization), consumes /map, /terrain/type and /terrain/direction, and
+    publishes /plan plus /terrain_minco/plan_meta. No controller, local planner
+    or recovery behaviour is included.
+  </description>
+  <maintainer email="li15933001767@163.com">L-Anjing</maintainer>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>rosidl_default_generators</buildtool_depend>

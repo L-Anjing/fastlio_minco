@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "sessionId": "session-4a859450-71c1-4ca0-a07c-16fe15346001",
+  "cwd": "/home/li/workspace/fastlio_nav2",
+  "updatedAt": 1791200504151,
+  "checkpoints": [
+    {
+      "turn": 6,
+      "commit": "3c135069ffc9fee105ce42f224122b85ad41cbd9",
+      "parent": "d4e8576fa6473cf9b953bd4b8f64b62222110a45",
+      "time": 1791200278356,
+      "untracked": [],
+      "truncated": false,
+      "after": {
+        "commit": "8d13015d54cce24b42de72e48288a42bbe1b4cb1",
+        "time": 1791200376085
+      }
+    },
+    {
+      "turn": 7,
+      "commit": "8d13015d54cce24b42de72e48288a42bbe1b4cb1",
+      "parent": "8d13015d54cce24b42de72e48288a42bbe1b4cb1",
+      "time": 1791200460130,
+      "untracked": [],
+      "truncated": false,
+      "after": {
+        "commit": "5b10fd433e7ccb1b120d8f96cab98ec68dd5c86b",
+        "time": 1791200504034
+      }
+    }
+  ],
+  "rolls": [],
+  "undos": []
+}
