@@ -1,0 +1,43 @@
+pcd_to_occupancy_map:
+  ros__parameters:
+    # 栅格分辨率（米）
+    resolution: 0.05
+    # 相对每个栅格局部行驶表面的障碍高度范围。这样高平台、坡面和台阶踏面
+    # 不会因绝对 z 较高而被误判为障碍。
+    z_min: 0.07
+    z_max: 1.5
+    # 一个栅格里至少这么多点才算占据
+    min_points_per_cell: 1
+    # true: 没观测过的格子标 unknown(-1，灰色)，不当作可通行
+    # false: 边界框内一律当空闲(0，白色)
+    mark_unknown: true
+    # 栅格图所在坐标系
+    frame_id: "map"
+    # 发布话题
+    occupancy_topic: "/map"
+    # 非空时把结果存成 <prefix>.pgm 和 <prefix>.yaml
+    save_prefix: ""
+
+    # 从同一张先验 PCD 自动发布 /terrain/type 和 /terrain/direction。
+    auto_terrain: true
+    terrain_type_topic: "/terrain/type"
+    terrain_direction_topic: "/terrain/direction"
+    # 仅供 RViz 观察：坡道/台阶逐格导出的彩色点云（坡道=琥珀，台阶=洋红）。
+    # /terrain/type 的 0..3 用 RViz 的 Map 显示无法分色，所以额外给这一路。
+    terrain_cloud_topic: "/terrain/colored"
+    # 比赛场地行驶表面的绝对 z 范围：地面 0m、L1 0.6m、L2 0.9m。
+    surface_z_min: -0.30
+    surface_z_max: 1.20
+    # 连续局部平面落在该坡度范围内时识别为坡道。
+    slope_min_deg: 5.0
+    slope_max_deg: 35.0
+    slope_fit_radius: 0.20
+    slope_max_residual: 0.020
+    # 规则指定的楼梯尺寸：每级进深 0.30m、高 0.15m、总宽 1.00m。
+    stair_rise: 0.15
+    stair_tread: 0.30
+    stair_rise_tolerance: 0.025
+    stair_half_width: 0.55
+    stair_min_width: 0.65
+    # 删除面积过小的坡道/台阶误检斑点。
+    terrain_min_component_area: 0.50

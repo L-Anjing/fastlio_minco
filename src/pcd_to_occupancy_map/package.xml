@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="3">
+<name>pcd_to_occupancy_map</name>
+<version>1.0.0</version>
+<description>Convert a prior PCD map into Nav2 occupancy and terrain grids.</description>
+
+<maintainer email="dev@livoxtech.com">FAST-LIO maintainers</maintainer>
+<license>GPL-2.0-only</license>
+
+<buildtool_depend>ament_cmake</buildtool_depend>
+
+<depend>rclcpp</depend>
+<depend>nav_msgs</depend>
+<depend>sensor_msgs</depend>
+<depend>libpcl-all-dev</depend>
+
+<exec_depend>launch</exec_depend>
+<exec_depend>launch_ros</exec_depend>
+
+<export>
+    <build_type>ament_cmake</build_type>
+</export>
+</package>

@@ -49,7 +49,7 @@ struct StepSeed
 class PcdToOccupancyMap : public rclcpp::Node
 {
 public:
-  PcdToOccupancyMap() : Node("pcd_to_occupancy_map")
+  PcdToOccupancyMap() : rclcpp::Node("pcd_to_occupancy_map")
   {
     pcd_file_ = declare_parameter<std::string>("pcd_file", "");
     resolution_ = declare_parameter<double>("resolution", 0.05);

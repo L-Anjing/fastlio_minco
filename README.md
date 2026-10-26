@@ -50,14 +50,14 @@ flowchart LR
 
 ## 🚀 快速开始
 
-环境：Ubuntu + ROS 2 Humble，工作区默认位于 `~/workspace/fastlio_minco`
+环境：Ubuntu + ROS 2 Humble。以下命令假设工作区位于 `~/workspace/fastlio_nav2`；若放在其他位置，请将该路径替换为实际目录。
 
 ### 1. Enviroment Configuration And Package Build
 
 #### 1.1 依赖安装
 
 ```bash
-cd ~/workspace/fastlio_minco
+cd ~/workspace/fastlio_nav2
 source /opt/ros/humble/setup.bash
 rosdep install -r --from-paths src --ignore-src --rosdistro humble -y
 ```
@@ -66,39 +66,42 @@ rosdep install -r --from-paths src --ignore-src --rosdistro humble -y
 
 * 雷达IP修改：[`lidar_configs:ip`](src/livox_ros_driver2/config/MID360_config.json)
 * 雷达安装位置：[`robot_extrinsic`](src/fast_lio/config/mapping/mid360.yaml)
-* 实时点云分割参数：`self_fliter` / `obstacle_*_height` / `sensor_height` - [`segmentation_params.yaml`](src/linefit_ground_segmentation_ros/launch/segmentation_params.yaml)
-* 规划采用外接圆半径：[`robot_radias`](src/navigation/params/nav2_params.yaml)
+* 实时点云分割参数：`self_filter` / `obstacle_*_height` / `sensor_height` - [`segmentation_params.yaml`](src/linefit_ground_segmentation_ros/launch/segmentation_params.yaml)
+* 规划采用外接圆半径：`robot_radius` - [`nav2_params.yaml`](src/navigation/params/nav2_params.yaml)
 
 #### 1.3 Build
 
 ```bash
-source /opt/ros/humble/setup.bash
-cd ~/workspace/fastlio_minco
-colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
+cd ~/workspace/fastlio_nav2
+./build.sh
 ```
+
+脚本会加载 ROS 2 Humble，并以 Release 模式执行 `colcon build --symlink-install`。首次构建前先完成上面的 rosdep 依赖安装；构建完成后在新终端 source `install/setup.bash`。
 
 ---
 
 ### 2. Prior Map Creation
 
-1. 修改 [`mid360.yaml`](src/fast_lio/config/mapping/mid360.yaml) 内 `pcd_save = true`
-2. 启动 `fastlio mapping` 完成先验地图构建，扫图结束后 `Ctrl+C` 结束自动保存 `PCD` 地图
+1. 确认 [`mid360.yaml`](src/fast_lio/config/mapping/mid360.yaml) 中 `pcd_save/pcd_save_en: true`。
+2. 启动建图链路；移动机器人完成扫描后按 `Ctrl+C`，FAST-LIO 会按配置保存 PCD。
 
 ```bash
-cd ~/workspace/fastlio_minco
-bash launch_mapping.sh
+cd ~/workspace/fastlio_nav2
+./launch_mapping.sh
 ```
+
+`launch_mapping.sh` 会打开独立终端启动 MID-360 驱动和 FAST-LIO mapping，不需要另行启动雷达驱动。
 
 ---
 
 ### 3. Reloc And Plan
 
 ```bash
-cd ~/workspace/fastlio_minco
-bash launch_nav_chain.sh
+cd ~/workspace/fastlio_nav2
+./launch_nav_chain.sh
 ```
 
-重定位成功后，在导航 RViz 中使用 **Nav2 Goal** 设置终点，也可以采用话题发布方式设置目标点；规划路径通过 `/plan` 发布。
+脚本会依次启动雷达驱动、先验图重定位、地面分割和 Nav2/RViz。默认先验图为 `src/fast_lio/PCD/scans.pcd`；也可以通过 `MAP_PCD=/绝对路径/地图.pcd` 指定其他地图。重定位成功后，在导航 RViz 中使用 **Nav2 Goal** 设置终点，规划路径通过 `/plan` 发布。
 
 ---
 
@@ -110,6 +113,7 @@ bash launch_nav_chain.sh
 | [`navigation`](src/navigation/README.md) | 地形栅格、TerrainMinco 规划器、动态障碍、行为树、路径接口 |
 | [`linefit_ground_segmentation_ros`](src/linefit_ground_segmentation_ros/README.md) | 分割节点、车体滤除、话题与参数说明 |
 | [`linefit_ground_segmentation`](src/linefit_ground_segmentation/README.md) | LineFit 分割算法库与核心参数 |
+| [`pcd_to_occupancy_map`](src/pcd_to_occupancy_map/README.md) | 先验 PCD 转占据栅格与地形语义栅格 |
 
 ---
 
@@ -128,11 +132,15 @@ bash launch_nav_chain.sh
 ## 📂 工作区布局
 
 ```text
+build.sh
+launch_mapping.sh
+launch_nav_chain.sh
 src/
 ├── fast_lio/                         # 里程计、重定位与地图生成
 ├── livox_ros_driver2/                # MID-360 ROS 2 驱动
 ├── linefit_ground_segmentation/      # 地面分割核心算法库
 ├── linefit_ground_segmentation_ros/  # ROS 2 分割节点与参数
+├── pcd_to_occupancy_map/             # PCD 转占据栅格与地形语义栅格
 └── navigation/                       # Nav2 规划前端 + TerrainMinco + RViz
 ```
 

@@ -1,0 +1,3 @@
+[submodule "src/fast_lio"]
+	path = src/fast_lio
+	url = https://github.com/zxzzzxz-id/fast_lio
