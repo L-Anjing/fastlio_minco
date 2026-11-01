@@ -50,14 +50,16 @@ flowchart LR
 
 ## 🚀 快速开始
 
-环境：Ubuntu + ROS 2 Humble。以下命令假设工作区位于 `~/workspace/fastlio_nav2`；若放在其他位置，请将该路径替换为实际目录。
+环境：Ubuntu + ROS 2 Humble。以下命令假设工作区位于 `fastlio_minco`；若放在其他位置，请将该路径替换为实际目录。
 
 ### 1. Enviroment Configuration And Package Build
 
 #### 1.1 依赖安装
 
 ```bash
-cd ~/workspace/fastlio_nav2
+# 克隆主仓库及所有子模块
+git clone --recurse-submodules https://github.com/L-Anjing/fastlio_minco.git
+cd fastlio_minco
 source /opt/ros/humble/setup.bash
 rosdep install -r --from-paths src --ignore-src --rosdistro humble -y
 ```
@@ -72,7 +74,7 @@ rosdep install -r --from-paths src --ignore-src --rosdistro humble -y
 #### 1.3 Build
 
 ```bash
-cd ~/workspace/fastlio_nav2
+cd fastlio_minco/
 ./build.sh
 ```
 
@@ -86,7 +88,7 @@ cd ~/workspace/fastlio_nav2
 2. 启动建图链路；移动机器人完成扫描后按 `Ctrl+C`，FAST-LIO 会按配置保存 PCD。
 
 ```bash
-cd ~/workspace/fastlio_nav2
+cd fastlio_minco/
 ./launch_mapping.sh
 ```
 
@@ -97,7 +99,7 @@ cd ~/workspace/fastlio_nav2
 ### 3. Reloc And Plan
 
 ```bash
-cd ~/workspace/fastlio_nav2
+cd fastlio_minco
 ./launch_nav_chain.sh
 ```
 
